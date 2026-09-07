@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Transaction History</h2>
+
+<div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <table>
+        <tr>
+            <th>Date & Time</th>
+            <th>Book Title</th>
+            <th>Action</th>
+            <!-- Only librarians need to see which student did it -->
+            {% if session.role == 'librarian' %}
+                <th>Student Name</th>
+            {% endif %}
+        </tr>
+        
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.transaction_date }}</td>
+            <td>{{ log.title }}</td>
+            
+            <td>
+                {% if log.action == 'issued' %}
+                    <span style="color: green; font-weight: bold;">Issued</span>
+                {% else %}
+                    <span style="color: #007bff; font-weight: bold;">Returned</span>
+                {% endif %}
+            </td>
+            
+            {% if session.role == 'librarian' %}
+                <td>{{ log.username }}</td>
+            {% endif %}
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4" style="text-align: center; padding: 20px;">No transaction history found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

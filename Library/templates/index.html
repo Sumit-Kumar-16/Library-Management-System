@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to Library App</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    
+</head>
+<body>
+
+    <!-- THE LEFT SIDE: Application Details -->
+    <div class="info-section">
+        <h1>Smart Library</h1>
+        <p>Your digital gateway to thousands of books. Manage your reading list, track your borrowing history, and discover new authors all in one place.</p>
+        
+        <h3>Platform Features:</h3>
+        <ul>
+            <li><b>Instant Search:</b> Find books by title or author instantly.</li>
+            <li><b>One-Click Borrowing:</b> Send book requests directly to the librarian.</li>
+            <li><b>Digital Logs:</b> Keep a permanent history of every book you read.</li>
+            <li><b>Secure Access:</b> Role-based dashboards for students and staff.</li>
+        </ul>
+    </div>
+
+    <!-- THE RIGHT SIDE: Login and Registration Forms -->
+    <div class="form-section">
+        
+        <!-- Login Box -->
+        <div class="container">
+            <h2>Account Login</h2>
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <p class="message">{{ messages[0] }}</p>
+              {% endif %}
+            {% endwith %}
+            
+            <form action="/" method="POST">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login to Dashboard</button>
+            </form>
+        </div>
+
+        <!-- Registration Box -->
+        <div class="container">
+            <h2>Create New Account</h2>
+            <form action="/register" method="POST">
+                <input type="text" name="full_name" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Email Address" required>
+                <input type="text" name="username" placeholder="Choose a Username" required>
+                <input type="password" name="password" placeholder="Choose a Password" required>
+                
+                <select name="role" id="roleSelect" onchange="toggleAdminCode()" required>
+                    <option value="student">Student</option>
+                    <option value="librarian">Librarian</option>
+                </select>
+
+                <input type="password" name="admin_code" id="adminCodeInput" placeholder="Secret Librarian Code" style="display: none;">
+                
+                <button type="submit" class="btn-blue">Register Account</button>
+            </form>
+        </div> 
+
+    </div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

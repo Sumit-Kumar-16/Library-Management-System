@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>My Profile</h2>
+
+<div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 500px;">
+    <!-- Username and Role cannot be changed, so we just display them -->
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Role:</strong> <span style="text-transform: capitalize;">{{ user.role }}</span></p>
+    
+    <hr style="border: 1px solid #eee; margin: 15px 0;">
+    
+    <form method="POST" action="/profile">
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 5px;">Full Name</label>
+            <!-- value="{{ user.full_name }}" pre-fills the box with their current name -->
+            <input type="text" name="full_name" value="{{ user.full_name }}" required style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 5px;">Email Address</label>
+            <input type="email" name="email" value="{{ user.email }}" required style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+        
+        <button type="submit" class="btn btn-blue" style="width: 100%; padding: 10px; font-weight: bold;">Update Profile</button>
+    </form>
+</div>
+{% endblock %}

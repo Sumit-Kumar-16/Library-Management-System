@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library System</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; }
+        .navbar { background: #343a40; padding: 15px; color: white; display: flex; justify-content: space-between;}
+        .navbar a { color: white; text-decoration: none; padding: 0 15px; font-weight: bold; }
+        .container { padding: 20px; }
+        .btn { padding: 8px 12px; text-decoration: none; border-radius: 4px; color: white; border: none; cursor:pointer;}
+        .btn-blue { background: #007bff; } .btn-green { background: #28a745; } .btn-red { background: #dc3545; }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 15px;}
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+    </style>
+</head>
+<body>
+    {% if session.user_id %}
+    <div class="navbar">
+
+        <div>
+            <span>Library System ({{ session.role|title }})</span>
+            <a href="/dashboard">Catalog</a>
+            <a href="/history">History</a>
+            
+            <!-- NEW: Only Librarians see the Student Management tab -->
+            {% if session.role == 'librarian' %}
+                <a href="/students">Students</a>
+            {% endif %}
+            
+            <a href="/profile">My Profile</a>
+        </div>
+
+        <a href="/logout" class="btn btn-red" style="padding: 5px 10px;">Logout</a>
+    </div>
+    {% endif %}
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %} <p style="color:red; font-weight:bold;">{{ messages[0] }}</p> {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %} <!-- Page specific content goes here -->
+    </div>
+</body>
+</html>

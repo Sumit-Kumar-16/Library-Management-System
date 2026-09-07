@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Edit Book</h2>
+
+<div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 500px;">
+    <form method="POST">
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 5px;">Book Title</label>
+            <input type="text" name="title" value="{{ book.title }}" required style="width: 100%; padding: 10px; box-sizing: border-box;">
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 5px;">Author</label>
+            <input type="text" name="author" value="{{ book.author }}" required style="width: 100%; padding: 10px; box-sizing: border-box;">
+        </div>
+        
+        <button type="submit" class="btn btn-blue" style="width: 100%; padding: 10px;">Update Book</button>
+        <a href="/dashboard" class="btn btn-red" style="display: block; text-align: center; margin-top: 10px; padding: 10px;">Cancel</a>
+    </form>
+</div>
+{% endblock %}

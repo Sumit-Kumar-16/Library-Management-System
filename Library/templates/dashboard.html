@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Library Catalog</h2>
+
+<!-- SEARCH BAR (Common) -->
+<form method="GET" action="/dashboard" style="margin-bottom: 20px;">
+    <input type="text" name="search" placeholder="Search by title or author..." value="{{ search_query }}" style="padding: 10px; width: 60%;">
+    <button type="submit" class="btn btn-blue">Search</button>
+    <a href="/dashboard" class="btn btn-red">Clear</a>
+</form>
+
+<!-- ADD BOOK (Librarian Only) -->
+{% if session.role == 'librarian' %}
+<div style="background: white; padding: 15px; margin-bottom: 20px;">
+    <h3>Add New Book</h3>
+    <form method="POST">
+        <input type="text" name="title" placeholder="Title" required>
+        <input type="text" name="author" placeholder="Author" required>
+        <button type="submit" class="btn btn-green">Add Book</button>
+    </form>
+</div>
+{% endif %}
+
+<!-- CATALOG TABLE -->
+<table>
+    <tr>
+        <th>Title</th> <th>Author</th> <th>Status</th>
+        {% if session.role == 'librarian' %} <th>Student (Action)</th> {% endif %}
+        <th>Action</th>
+    </tr>
+    {% for book in books %}
+    <tr>
+        <td>{{ book.title }}</td> <td>{{ book.author }}</td>
+        <td><b>{{ book.status|title }}</b></td>
+        
+        {% if session.role == 'librarian' %}
+            <td>
+                {% if book.status == 'requested' %} Requested by: {{ book.requested_by_name }}
+                {% elif book.status == 'issued' %} Issued to: {{ book.issued_to_name }}
+                {% else %} - {% endif %}
+            </td>
+        {% endif %}
+
+        <td>
+            <!-- STUDENT ACTIONS -->
+            {% if session.role == 'student' %}
+                {% if book.status == 'available' %}
+                    <a href="/request_book/{{ book.id }}" class="btn btn-blue">Request Borrow</a>
+                {% elif book.status == 'issued' and book.issued_to == session.user_id %}
+                    <a href="/return_book/{{ book.id }}" class="btn btn-red">Return Book</a>
+                {% endif %}
+            
+         <!-- LIBRARIAN ACTIONS -->
+            {% elif session.role == 'librarian' %}
+                {% if book.status == 'requested' %}
+                    <a href="/approve_book/{{ book.id }}" class="btn btn-green">Approve Issue</a>
+                {% elif book.status == 'issued' %}
+                    <a href="/return_book/{{ book.id }}" class="btn btn-blue">Mark Returned</a>
+                {% endif %}
+                
+                <!-- NEW: Edit and Delete Buttons -->
+                <a href="/edit_book/{{ book.id }}" class="btn btn-warning" style="background-color: #ffc107; color: black; margin-left: 5px;">Edit</a>
+                <a href="/delete_book/{{ book.id }}" class="btn btn-red" onclick="return confirm('Are you sure you want to delete this book?');" style="margin-left: 5px;">Delete</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
